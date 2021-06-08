@@ -1,26 +1,21 @@
 <h1 align="center">
-  <a href="https://www.npmjs.com/package/alfred-evernote-workflow">
-		Alfred-evernote-workflow<br>
-	  <img src="https://img.shields.io/npm/dt/alfred-evernote-workflow" alt="NPM Release">
-	  <img src="https://img.shields.io/github/license/jopemachine/alfred-evernote-workflow.svg" alt="License">
-	  <img src="https://api.travis-ci.com/jopemachine/alfred-evernote-workflow.svg" alt="BuildStatus">
+  <a href="https://www.npmjs.com/package/arvis-evernote-workflow">
+		Arvis-evernote-workflow<br>
+	  <img src="https://img.shields.io/npm/dt/arvis-evernote-workflow" alt="NPM Release">
+	  <img src="https://img.shields.io/github/license/jopemachine/arvis-evernote-workflow.svg" alt="License">
   </a>
 </h1>
 
-[![NPM](https://nodei.co/npm/alfred-evernote-workflow.png)](https://nodei.co/npm/alfred-evernote-workflow/)
+[![NPM](https://nodei.co/npm/arvis-evernote-workflow.png)](https://nodei.co/npm/arvis-evernote-workflow/)
 
-Evernote Legacy version's workflow for Alfred 4
+Evernote Legacy version's workflow for Arvis 4
 
 * *Fast search using [Evernote sdk](https://github.com/evernote/evernote-sdk-js)*
 * *Preview feature using caching.*
 * *Supports thumbnail feature for notes with pictures.*
 * *You can change your search details.*
 
-<p align="center">
-<img src="./imgs/demo.gif" width = "75%" height="75%" />
-</p>
-
-## 📋 Features
+📋 Features
 
 * *View your latest notes*
 
@@ -40,20 +35,10 @@ Evernote Legacy version's workflow for Alfred 4
 <img src="./imgs/ens_tagJavascript.png" width = "60%" height="60%" />
 </p>
 
-<p align="center">
-<img src="./imgs/ens_Java.png" width = "60%" height="60%" />
-</p>
-
 * *View your all tags*
 
 <p align="center">
 <img src="./imgs/tag.png" width = "60%" height="60%" />
-</p>
-
-* *Search your tag*
-
-<p align="center">
-<img src="./imgs/tag_Javascript.png" width = "60%" height="60%" />
 </p>
 
 * *View and execute your usage log*
@@ -62,13 +47,13 @@ Evernote Legacy version's workflow for Alfred 4
 <img src="./imgs/log.png" width = "60%" height="60%" />
 </p>
 
-* *Preview your note in alfred*
+* *Preview your note in arvis*
 
 <p align="center">
-<img src="./imgs/preview.png" width = "60%" height="60%" />
+<img src="./imgs/quicklook.png" width = "60%" height="60%" />
 </p>
 
-Alfred-evernote-workflow caches note content and resources from the Evernote client and uses them for previews.
+Arvis-evernote-workflow caches note content and resources from the Evernote client and uses them for previews.
 
 In Preview, you can view the contents and images of your notes.
 
@@ -80,8 +65,6 @@ The prerequisites below are required to use that package.
 * Node JS
 
 * [Evernote Legacy Client](https://help.evernote.com/hc/en-us/articles/360052560314) on macOS
-
-* [Alfred powerpack](https://www.alfredapp.com/powerpack/)
 
 Note that your Evernote Client should be legacy version.
 
@@ -96,16 +79,16 @@ And don't forget to login into Evernote client and sync should be completed.
 2. **Install package by npm**
 
 ```
-$ npm install --global alfred-evernote-workflow
+$ npm install --global arvis-evernote-workflow
 ```
 
 If you have problem with installation with above command,
 
-Please refer [these installaion issues](https://github.com/jopemachine/alfred-evernote-workflow/issues/8).
+Please refer [these installaion issues](https://github.com/jopemachine/arvis-evernote-workflow/issues/8).
 
 And let me know if the problem still remains or if there are other issues.
 
-If you want to install this package by not through NPM, you can download workflow file in [Packal](https://www.packal.org/workflow/alfred-evernote-workflow).
+If you want to install this package by not through NPM, you can download workflow file in [Packal](https://www.packal.org/workflow/arvis-evernote-workflow).
 
 3. **`en > gettoken` + <kbd>Enter</kbd>  to get your API key**
 
@@ -126,7 +109,7 @@ If your token value is `S=s198:U=161532d:E=17b2ea2ba85:C=173d6f18bc8:P=185:A=jop
 
 4. **`en > authtoken {your issued API key}` + <kbd>Enter</kbd>**
 
-Alfred-evernote-workflow uses your token to authenticate your account.
+Arvis-evernote-workflow uses your token to authenticate your account.
 
 Please pass the token value as a factor without quotation marks as shown below.
 
@@ -143,7 +126,7 @@ If you want to not use the preview feature, you can skip this phase.
 
 ## 📗 How to use
 
-In Alfred, type below query and <kbd>Enter</kbd>
+In Arvis, type below query and <kbd>Enter</kbd>
 
 You can use the below feature.
 
@@ -179,7 +162,7 @@ Sync Evernote Client.
 
 ### en > savecache
 
-Alfred-evernote-workflow use html cache to enable note preview feature.
+Arvis-evernote-workflow use html cache to enable note preview feature.
 
 This command save html caches of all of notes from your Evernote client. 
 
@@ -384,7 +367,7 @@ Type: `string (enum)`
 | "content_length" |  In the search results subtitle, specify the length of the note |
 | "notebook" |   In the search results subtitle, specify the notebook name of note |
 
-In the `ens` search results subtitle, specify which item Alfred show.
+In the `ens` search results subtitle, specify which item Arvis show.
 
 Note that some items may increase the api call of sdk, resulting in more sdk limit restrictions.
 
@@ -423,7 +406,7 @@ Type: `string (enum)`
 | "parent_tag" | In the search results subtitle, specify parent's tag of the tag |
 | "note_count" |  In the search results subtitle, specify number of notes that the tag has |
 
-In the `ent` search results subtitle, specify which item Alfred show.
+In the `ent` search results subtitle, specify which item Arvis show.
 
 Note that some items may increase the api call of sdk, resulting in more sdk limit restrictions.
 
@@ -481,4 +464,4 @@ Use the `en > clearcache` command to remove the cache already downloaded.
 
 ## License
 
-MIT © [jopemachine](https://github.com/jopemachine/alfred-evernote-workflow)
+MIT © [jopemachine](https://github.com/jopemachine/arvis-evernote-workflow)

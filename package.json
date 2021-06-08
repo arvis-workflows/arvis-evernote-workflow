@@ -9,7 +9,7 @@
   },
   "bundleDependencies": false,
   "dependencies": {
-    "@jopemachine/arvish": "^0.1.18",
+    "@jopemachine/arvish": "^0.1.19",
     "@jxa/global-type": "^1.3.1",
     "@jxa/run": "^1.3.2",
     "boxen": "^4.2.0",
@@ -60,7 +60,7 @@
     "workflow"
   ],
   "license": "MIT",
-  "name": "arvis-evernote-workflow",
+  "name": "@jopemachine/arvis-evernote-workflow",
   "repository": {
     "url": "git://github.com/jopemachine/arvis-evernote-workflow.git"
   },
@@ -74,5 +74,5 @@
     "clearHtmlCache": "node deleteSearchContent.js",
     "init": "node init.js"
   },
-  "version": "0.0.1"
+  "version": "0.0.3"
 }
