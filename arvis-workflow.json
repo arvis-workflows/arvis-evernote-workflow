@@ -1,0 +1,1773 @@
+{
+  "$schema": "https://github.com/jopemachine/arvis-core/blob/master/workflow-schema.json",
+  "category": "Productivity",
+  "createdby": "jopemachine",
+  "description": "Arvis evernote workflow",
+  "defaultIcon": "icon.png",
+  "name": "alfred-evernote-workflow",
+  "readme": "Evernote workflow for Arvis \n\nhttps://github.com/jopemachine/alfred-evernote-workflow",
+  "version": "0.0.1",
+  "webaddress": "https://github.com/jopemachine/arvis-evernote-workflow#readme",
+  "enabled": true,
+  "commands": [
+    {
+      "type": "keyword",
+      "command": "en > authtoken",
+      "title": "en > authtoken",
+      "subtitle": "Usage: en > authtoken {your api token}",
+      "withspace": true,
+      "arg_type": "required",
+      "action": [
+        {
+          "modifiers": "normal",
+          "type": "script",
+          "script": "node auth.js '{query}'",
+          "action": [
+            {
+              "modifiers": "normal",
+              "type": "cond",
+              "if": {
+                "cond": "new RegExp(\".*error.*\").test({query})",
+                "action": {
+                  "then": [
+                    {
+                      "modifiers": "normal",
+                      "type": "notification",
+                      "title": "Auth failed.",
+                      "text": "Not a valid token."
+                    }
+                  ],
+                  "else": [
+                    {
+                      "modifiers": "normal",
+                      "type": "notification",
+                      "title": "Auth Complete Successfully!",
+                      "text": "Proceed with saveCache for preview feature"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "keyword",
+      "command": "en > gettoken",
+      "title": "en > gettoken",
+      "subtitle": "Get OAuth token by your evernote account",
+      "withspace": false,
+      "arg_type": "no",
+      "action": [
+        {
+          "modifiers": "normal",
+          "type": "open",
+          "target": "https://fk5dbjl4x5.execute-api.us-east-1.amazonaws.com/prod/auth"
+        }
+      ]
+    },
+    {
+      "type": "keyword",
+      "command": "en",
+      "title": "en",
+      "subtitle": "Open the Evernote.",
+      "withspace": false,
+      "arg_type": "no",
+      "action": [
+        {
+          "modifiers": "normal",
+          "type": "script",
+          "script": "node writeLog.js \"en\""
+        }
+      ]
+    },
+    {
+      "type": "keyword",
+      "command": "en > clearcache",
+      "title": "en > clearcache",
+      "subtitle": "Clean all quicklook cache of alfred-evernote-workflow",
+      "withspace": false,
+      "arg_type": "no",
+      "action": [
+        {
+          "modifiers": "normal",
+          "type": "script",
+          "script": "node deleteSearchContent.js",
+          "action": [
+            {
+              "modifiers": "normal",
+              "type": "notification",
+              "title": "Cache cleared",
+              "text": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "keyword",
+      "command": "en > clearlog",
+      "title": "en > clearlog",
+      "subtitle": "Clean all command logs",
+      "withspace": false,
+      "arg_type": "no",
+      "action": [
+        {
+          "modifiers": "normal",
+          "type": "script",
+          "script": "node deleteCommandLog.js",
+          "action": [
+            {
+              "modifiers": "normal",
+              "type": "notification",
+              "title": "Command logs have been cleared",
+              "text": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "keyword",
+      "command": "__en > savecache",
+      "title": "This work could take several minutes.",
+      "subtitle": "You'll get a notification when the caching is complete.",
+      "withspace": false,
+      "arg_type": "no",
+      "action": []
+    },
+    {
+      "type": "keyword",
+      "command": "en > help",
+      "title": "en > help",
+      "subtitle": "Please Read readme.md first",
+      "withspace": false,
+      "arg_type": "no",
+      "action": [
+        {
+          "modifiers": "normal",
+          "type": "open",
+          "target": "https://github.com/jopemachine/alfred-evernote-workflow"
+        }
+      ]
+    },
+    {
+      "type": "keyword",
+      "command": "enc",
+      "title": "enc",
+      "subtitle": "Enter note content to create.",
+      "withspace": true,
+      "arg_type": "required",
+      "action": [
+        {
+          "modifiers": "normal",
+          "type": "script",
+          "script": "node createNote.js '{query}'",
+          "action": [
+            {
+              "modifiers": "normal",
+              "type": "notification",
+              "title": "Note created!",
+              "text": "The contents of the note have been copied to the clipboard."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "keyword",
+      "command": "en > sync",
+      "title": "en > sync",
+      "subtitle": "Sync Evernote",
+      "withspace": false,
+      "arg_type": "no",
+      "action": [
+        {
+          "modifiers": "normal",
+          "type": "script",
+          "script": "tell application \"Evernote\" to synchronize",
+          "action": [
+            {
+              "modifiers": "normal",
+              "type": "notification",
+              "title": "Evernote sync",
+              "text": ""
+            }
+          ]
+        },
+        {
+          "modifiers": "normal",
+          "type": "script",
+          "script": "node writeLog.js \"ensync\""
+        }
+      ]
+    },
+    {
+      "type": "scriptfilter",
+      "command": "en > savecache",
+      "title": "en > savecache",
+      "subtitle": "",
+      "script_filter": "node checkBeforeCaching.js",
+      "running_subtext": "",
+      "withspace": false,
+      "arg_type": "no",
+      "action": [
+        {
+          "modifiers": "normal",
+          "type": "cond",
+          "if": {
+            "cond": "new RegExp(\"true\").test({query})",
+            "action": {
+              "then": [
+                {
+                  "modifiers": "normal",
+                  "type": "script",
+                  "script": "osascript saveCache.scpt",
+                  "action": [
+                    {
+                      "modifiers": "normal",
+                      "type": "cond",
+                      "if": {
+                        "cond": "new RegExp(\".*1763.*\").test({query})",
+                        "action": {
+                          "then": [
+                            {
+                              "modifiers": "normal",
+                              "type": "notification",
+                              "title": "Json format error",
+                              "text": "After en > clearcache, carry out en > savecache. If the error is not gone, pls check the issue."
+                            }
+                          ],
+                          "else": [
+                            {
+                              "modifiers": "normal",
+                              "type": "notification",
+                              "title": "Cache downloading complete!",
+                              "text": "Note search is now available."
+                            },
+                            {
+                              "modifiers": "normal",
+                              "type": "script",
+                              "script": "node setEnvAttr.js initialCaching true"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ],
+              "else": [
+                {
+                  "modifiers": "normal",
+                  "type": "notification",
+                  "title": "Init error",
+                  "text": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "scriptfilter",
+      "command": "enct",
+      "title": "enct",
+      "subtitle": "Select tag and enter note content to create.",
+      "script_filter": "node searchTag.js '{query}' --create",
+      "running_subtext": "Tag searching...",
+      "withspace": true,
+      "arg_type": "optional",
+      "action": [
+        {
+          "modifiers": "normal",
+          "type": "keyword",
+          "subtitle": "Please enter note content to create.",
+          "action": [
+            {
+              "modifiers": "normal",
+              "type": "script",
+              "script": "node createNoteWithTag.js '{query}'",
+              "action": [
+                {
+                  "modifiers": "normal",
+                  "type": "notification",
+                  "title": "Note created!",
+                  "text": "The contents of the note have been copied to the clipboard."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "scriptfilter",
+      "command": "enl",
+      "title": "enl",
+      "subtitle": "Retrieve your command logs",
+      "script_filter": "node readLog.js {query}",
+      "running_subtext": "Fetching...",
+      "withspace": true,
+      "arg_type": "optional",
+      "action": [
+        {
+          "modifiers": "normal",
+          "type": "cond",
+          "if": {
+            "cond": "new RegExp(\"\\$\\{en\\}\").test({query})",
+            "action": {
+              "then": [
+                {
+                  "modifiers": "normal",
+                  "type": "keyword",
+                  "keyword": "en",
+                  "subtitle": "Open the Evernote.",
+                  "action": [
+                    {
+                      "modifiers": "normal",
+                      "type": "script",
+                      "script": "node writeLog.js \"en\""
+                    }
+                  ]
+                }
+              ],
+              "else": []
+            }
+          }
+        },
+        {
+          "modifiers": "normal",
+          "type": "cond",
+          "if": {
+            "cond": "new RegExp(\"\\$\\{ensync\\}\").test({query})",
+            "action": {
+              "then": [
+                {
+                  "modifiers": "normal",
+                  "type": "keyword",
+                  "keyword": "en > sync",
+                  "subtitle": "Sync Evernote",
+                  "action": [
+                    {
+                      "modifiers": "normal",
+                      "type": "script",
+                      "script": "tell application \"Evernote\" to synchronize",
+                      "action": [
+                        {
+                          "modifiers": "normal",
+                          "type": "notification",
+                          "title": "Evernote sync",
+                          "text": ""
+                        }
+                      ]
+                    },
+                    {
+                      "modifiers": "normal",
+                      "type": "script",
+                      "script": "node writeLog.js \"ensync\""
+                    }
+                  ]
+                }
+              ],
+              "else": []
+            }
+          }
+        },
+        {
+          "modifiers": "normal",
+          "type": "cond",
+          "if": {
+            "cond": "new RegExp(\"\\$\\{entodo\\}\").test({query})",
+            "action": {
+              "then": [
+                {
+                  "modifiers": "normal",
+                  "command": "entodo",
+                  "title": "entodo",
+                  "type": "scriptfilter",
+                  "script_filter": "node searchNote.js '{query}' --todo",
+                  "running_subtext": "Searching...",
+                  "withspace": true,
+                  "action": [
+                    {
+                      "modifiers": "fn",
+                      "type": "script",
+                      "script": "osascript openWebBrowser.scpt $1",
+                      "action": [
+                        {
+                          "modifiers": "normal",
+                          "type": "notification",
+                          "title": "Note not contained url!",
+                          "text": "Source URL Error"
+                        }
+                      ]
+                    },
+                    {
+                      "modifiers": "normal",
+                      "type": "cond",
+                      "if": {
+                        "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
+                        "action": {
+                          "then": [
+                            {
+                              "modifiers": "normal",
+                              "type": "script",
+                              "script": "osascript openNoteWithNotelink.scpt {query}"
+                            },
+                            {
+                              "modifiers": "normal",
+                              "type": "script",
+                              "script": "node writeLog.js \"noteopen {query}\""
+                            }
+                          ],
+                          "else": [
+                            {
+                              "modifiers": "normal",
+                              "type": "cond",
+                              "if": {
+                                "cond": "{query} == \"error\"",
+                                "action": {
+                                  "then": [],
+                                  "else": [
+                                    {
+                                      "modifiers": "normal",
+                                      "type": "script",
+                                      "script": "osascript openCollectionWindow.scpt {query}"
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ],
+              "else": []
+            }
+          }
+        },
+        {
+          "modifiers": "normal",
+          "type": "cond",
+          "if": {
+            "cond": "new RegExp(\"\\$\\{noteopen\\}.*\").test({query})",
+            "action": {
+              "then": [
+                {
+                  "modifiers": "normal",
+                  "type": "script",
+                  "script": "osascript openNoteWithNotelink.scpt {query}"
+                }
+              ],
+              "else": []
+            }
+          }
+        },
+        {
+          "modifiers": "normal",
+          "type": "cond",
+          "if": {
+            "cond": "new RegExp(\"\\$\\{ens\\}.*\").test({query})",
+            "action": {
+              "then": [
+                {
+                  "modifiers": "normal",
+                  "command": "ens",
+                  "title": "ens",
+                  "type": "scriptfilter",
+                  "script_filter": "node searchNote.js '{query}'",
+                  "running_subtext": "Searching...",
+                  "withspace": true,
+                  "action": [
+                    {
+                      "modifiers": "fn",
+                      "type": "script",
+                      "script": "osascript openWebBrowser.scpt $1",
+                      "action": [
+                        {
+                          "modifiers": "normal",
+                          "type": "notification",
+                          "title": "Note not contained url!",
+                          "text": "Source URL Error"
+                        }
+                      ]
+                    },
+                    {
+                      "modifiers": "normal",
+                      "type": "cond",
+                      "if": {
+                        "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
+                        "action": {
+                          "then": [
+                            {
+                              "modifiers": "normal",
+                              "type": "args",
+                              "arg": "{var:notelink}",
+                              "action": [
+                                {
+                                  "modifiers": "normal",
+                                  "type": "script",
+                                  "script": "osascript openNoteWithNotelink.scpt {query}"
+                                }
+                              ]
+                            },
+                            {
+                              "modifiers": "normal",
+                              "type": "args",
+                              "arg": "{var:notelink} {var:noteTitle}",
+                              "action": [
+                                {
+                                  "modifiers": "normal",
+                                  "type": "script",
+                                  "script": "node writeLog.js \"noteopen {query}\""
+                                }
+                              ]
+                            }
+                          ],
+                          "else": [
+                            {
+                              "modifiers": "normal",
+                              "type": "cond",
+                              "if": {
+                                "cond": "{query} == \"error\"",
+                                "action": {
+                                  "then": [
+                                    {
+                                      "modifiers": "normal",
+                                      "type": "notification",
+                                      "title": "Error occured",
+                                      "text": ""
+                                    }
+                                  ],
+                                  "else": [
+                                    {
+                                      "modifiers": "normal",
+                                      "type": "script",
+                                      "script": "osascript openCollectionWindow.scpt {query}"
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ],
+              "else": []
+            }
+          }
+        },
+        {
+          "modifiers": "normal",
+          "type": "cond",
+          "if": {
+            "cond": "new RegExp(\"\\$\\{enn\\}.*\").test({query})",
+            "action": {
+              "then": [
+                {
+                  "modifiers": "normal",
+                  "command": "enn",
+                  "title": "enn",
+                  "type": "scriptfilter",
+                  "script_filter": "node searchNote.js '{query}' --trash",
+                  "running_subtext": "Searching...",
+                  "withspace": true,
+                  "action": [
+                    {
+                      "modifiers": "normal",
+                      "type": "script",
+                      "script": "osascript openNoteByBrowser.scpt {query}"
+                    }
+                  ]
+                }
+              ],
+              "else": []
+            }
+          }
+        },
+        {
+          "modifiers": "normal",
+          "type": "cond",
+          "if": {
+            "cond": "new RegExp(\"\\$\\{enu\\}.*\").test({query})",
+            "action": {
+              "then": [
+                {
+                  "modifiers": "normal",
+                  "command": "enu",
+                  "title": "enu",
+                  "type": "scriptfilter",
+                  "script_filter": "node searchNote.js '{query}' --sourceurl",
+                  "running_subtext": "Searching notes by URL",
+                  "withspace": true,
+                  "action": [
+                    {
+                      "modifiers": "fn",
+                      "type": "script",
+                      "script": "osascript openWebBrowser.scpt '{query}'",
+                      "action": [
+                        {
+                          "modifiers": "normal",
+                          "type": "notification",
+                          "title": "Note not contained url",
+                          "text": "Source URL Error"
+                        }
+                      ]
+                    },
+                    {
+                      "modifiers": "normal",
+                      "type": "cond",
+                      "if": {
+                        "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
+                        "action": {
+                          "then": [
+                            {
+                              "modifiers": "normal",
+                              "type": "args",
+                              "arg": "{var:notelink}",
+                              "action": [
+                                {
+                                  "modifiers": "normal",
+                                  "type": "script",
+                                  "script": "osascript openNoteWithNotelink.scpt $1"
+                                }
+                              ]
+                            },
+                            {
+                              "modifiers": "normal",
+                              "type": "args",
+                              "arg": "{var:notelink} {var:noteTitle}",
+                              "action": [
+                                {
+                                  "modifiers": "normal",
+                                  "type": "script",
+                                  "script": "node writeLog.js \"noteopen {query}\""
+                                }
+                              ]
+                            }
+                          ],
+                          "else": [
+                            {
+                              "modifiers": "normal",
+                              "type": "cond",
+                              "if": {
+                                "cond": "{query} == \"error\"",
+                                "action": {
+                                  "then": [
+                                    {
+                                      "modifiers": "normal",
+                                      "type": "notification",
+                                      "title": "Error occured",
+                                      "text": ""
+                                    }
+                                  ],
+                                  "else": [
+                                    {
+                                      "modifiers": "normal",
+                                      "type": "script",
+                                      "script": "osascript openCollectionWindow.scpt {query}"
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ],
+              "else": []
+            }
+          }
+        },
+        {
+          "modifiers": "normal",
+          "type": "cond",
+          "if": {
+            "cond": "new RegExp(\"\\$\\{enr\\}.*\").test({query})",
+            "action": {
+              "then": [
+                {
+                  "modifiers": "normal",
+                  "command": "enr",
+                  "title": "enr",
+                  "type": "scriptfilter",
+                  "script_filter": "node searchNote.js '{query}' --reminder",
+                  "running_subtext": "Searching notes with reminder",
+                  "withspace": true,
+                  "action": [
+                    {
+                      "modifiers": "fn",
+                      "type": "script",
+                      "script": "osascript openWebBrowser.scpt $1",
+                      "action": [
+                        {
+                          "modifiers": "normal",
+                          "type": "notification",
+                          "title": "Note not contained url",
+                          "text": "Source URL Error"
+                        }
+                      ]
+                    },
+                    {
+                      "modifiers": "normal",
+                      "type": "cond",
+                      "if": {
+                        "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
+                        "action": {
+                          "then": [
+                            {
+                              "modifiers": "normal",
+                              "type": "args",
+                              "arg": "{var:notelink} {var:noteTitle}",
+                              "action": [
+                                {
+                                  "modifiers": "normal",
+                                  "type": "script",
+                                  "script": "node writeLog.js \"noteopen {query}\""
+                                }
+                              ]
+                            },
+                            {
+                              "modifiers": "normal",
+                              "type": "args",
+                              "arg": "{var:notelink}",
+                              "action": [
+                                {
+                                  "modifiers": "normal",
+                                  "type": "script",
+                                  "script": "osascript openNoteWithNotelink.scpt $1"
+                                }
+                              ]
+                            }
+                          ],
+                          "else": [
+                            {
+                              "modifiers": "normal",
+                              "type": "cond",
+                              "if": {
+                                "cond": "{query} == \"error\"",
+                                "action": {
+                                  "then": [
+                                    {
+                                      "modifiers": "normal",
+                                      "type": "notification",
+                                      "title": "Error occured",
+                                      "text": ""
+                                    }
+                                  ],
+                                  "else": [
+                                    {
+                                      "modifiers": "normal",
+                                      "type": "script",
+                                      "script": "osascript openCollectionWindow.scpt {query}"
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ],
+              "else": []
+            }
+          }
+        },
+        {
+          "modifiers": "normal",
+          "type": "cond",
+          "if": {
+            "cond": "new RegExp(\"\\$\\{eni\\}.*\").test({query})",
+            "action": {
+              "then": [
+                {
+                  "modifiers": "normal",
+                  "command": "eni",
+                  "title": "eni",
+                  "type": "scriptfilter",
+                  "script_filter": "node searchNote.js '{query}' --intitle",
+                  "running_subtext": "Searching...",
+                  "withspace": true,
+                  "action": [
+                    {
+                      "modifiers": "fn",
+                      "type": "script",
+                      "script": "osascript openWebBrowser.scpt $1",
+                      "action": [
+                        {
+                          "modifiers": "normal",
+                          "type": "notification",
+                          "title": "Note not contained url",
+                          "text": "Source URL Error"
+                        }
+                      ]
+                    },
+                    {
+                      "modifiers": "normal",
+                      "type": "cond",
+                      "if": {
+                        "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
+                        "action": {
+                          "then": [
+                            {
+                              "modifiers": "normal",
+                              "type": "args",
+                              "arg": "{var:notelink} {var:noteTitle}",
+                              "action": [
+                                {
+                                  "modifiers": "normal",
+                                  "type": "script",
+                                  "script": "node writeLog.js \"noteopen {query}\""
+                                }
+                              ]
+                            },
+                            {
+                              "modifiers": "normal",
+                              "type": "args",
+                              "arg": "{var:notelink}",
+                              "action": [
+                                {
+                                  "modifiers": "normal",
+                                  "type": "script",
+                                  "script": "osascript openNoteWithNotelink.scpt $1"
+                                }
+                              ]
+                            }
+                          ],
+                          "else": [
+                            {
+                              "modifiers": "normal",
+                              "type": "cond",
+                              "if": {
+                                "cond": "{query} == \"error\"",
+                                "action": {
+                                  "then": [
+                                    {
+                                      "modifiers": "normal",
+                                      "type": "notification",
+                                      "title": "Error occured",
+                                      "text": ""
+                                    }
+                                  ],
+                                  "else": [
+                                    {
+                                      "modifiers": "normal",
+                                      "type": "script",
+                                      "script": "osascript openCollectionWindow.scpt {query}"
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ],
+              "else": []
+            }
+          }
+        },
+        {
+          "modifiers": "normal",
+          "type": "cond",
+          "if": {
+            "cond": "new RegExp(\"\\$\\{ent\\}.*\").test({query})",
+            "action": {
+              "then": [
+                {
+                  "modifiers": "normal",
+                  "command": "ens",
+                  "title": "ens",
+                  "type": "scriptfilter",
+                  "script_filter": "node searchNote.js '{query}'",
+                  "running_subtext": "Searching...",
+                  "withspace": true,
+                  "action": [
+                    {
+                      "modifiers": "fn",
+                      "type": "script",
+                      "script": "osascript openWebBrowser.scpt $1",
+                      "action": [
+                        {
+                          "modifiers": "normal",
+                          "type": "notification",
+                          "title": "Note not contained url!",
+                          "text": "Source URL Error"
+                        }
+                      ]
+                    },
+                    {
+                      "modifiers": "normal",
+                      "type": "cond",
+                      "if": {
+                        "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
+                        "action": {
+                          "then": [
+                            {
+                              "modifiers": "normal",
+                              "type": "args",
+                              "arg": "{var:notelink}",
+                              "action": [
+                                {
+                                  "modifiers": "normal",
+                                  "type": "script",
+                                  "script": "osascript openNoteWithNotelink.scpt {query}"
+                                }
+                              ]
+                            },
+                            {
+                              "modifiers": "normal",
+                              "type": "args",
+                              "arg": "{var:notelink} {var:noteTitle}",
+                              "action": [
+                                {
+                                  "modifiers": "normal",
+                                  "type": "script",
+                                  "script": "node writeLog.js \"noteopen {query}\""
+                                }
+                              ]
+                            }
+                          ],
+                          "else": [
+                            {
+                              "modifiers": "normal",
+                              "type": "cond",
+                              "if": {
+                                "cond": "{query} == \"error\"",
+                                "action": {
+                                  "then": [
+                                    {
+                                      "modifiers": "normal",
+                                      "type": "notification",
+                                      "title": "Error occured",
+                                      "text": ""
+                                    }
+                                  ],
+                                  "else": [
+                                    {
+                                      "modifiers": "normal",
+                                      "type": "script",
+                                      "script": "osascript openCollectionWindow.scpt {query}"
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ],
+              "else": []
+            }
+          }
+        },
+        {
+          "modifiers": "normal",
+          "type": "cond",
+          "if": {
+            "cond": "new RegExp(\"\\$\\{enb\\}.*\").test({query})",
+            "action": {
+              "then": [
+                {
+                  "modifiers": "normal",
+                  "command": "ens",
+                  "title": "ens",
+                  "type": "scriptfilter",
+                  "script_filter": "node searchNote.js '{query}'",
+                  "running_subtext": "Searching...",
+                  "withspace": true,
+                  "action": [
+                    {
+                      "modifiers": "fn",
+                      "type": "script",
+                      "script": "osascript openWebBrowser.scpt $1",
+                      "action": [
+                        {
+                          "modifiers": "normal",
+                          "type": "notification",
+                          "title": "Note not contained url!",
+                          "text": "Source URL Error"
+                        }
+                      ]
+                    },
+                    {
+                      "modifiers": "normal",
+                      "type": "cond",
+                      "if": {
+                        "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
+                        "action": {
+                          "then": [
+                            {
+                              "modifiers": "normal",
+                              "type": "args",
+                              "arg": "{var:notelink}",
+                              "action": [
+                                {
+                                  "modifiers": "normal",
+                                  "type": "script",
+                                  "script": "osascript openNoteWithNotelink.scpt {query}"
+                                }
+                              ]
+                            },
+                            {
+                              "modifiers": "normal",
+                              "type": "args",
+                              "arg": "{var:notelink} {var:noteTitle}",
+                              "action": [
+                                {
+                                  "modifiers": "normal",
+                                  "type": "script",
+                                  "script": "node writeLog.js \"noteopen {query}\""
+                                }
+                              ]
+                            }
+                          ],
+                          "else": [
+                            {
+                              "modifiers": "normal",
+                              "type": "cond",
+                              "if": {
+                                "cond": "{query} == \"error\"",
+                                "action": {
+                                  "then": [
+                                    {
+                                      "modifiers": "normal",
+                                      "type": "notification",
+                                      "title": "Error occured",
+                                      "text": ""
+                                    }
+                                  ],
+                                  "else": [
+                                    {
+                                      "modifiers": "normal",
+                                      "type": "script",
+                                      "script": "osascript openCollectionWindow.scpt {query}"
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ],
+              "else": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "scriptfilter",
+      "command": "entodo",
+      "title": "entodo",
+      "subtitle": "Search for notes with check boxes.",
+      "script_filter": "node searchNote.js '{query}' --todo",
+      "running_subtext": "Searching...",
+      "withspace": true,
+      "arg_type": "optional",
+      "action": [
+        {
+          "modifiers": "fn",
+          "type": "script",
+          "script": "osascript openWebBrowser.scpt $1",
+          "action": [
+            {
+              "modifiers": "normal",
+              "type": "notification",
+              "title": "Note not contained url!",
+              "text": "Source URL Error"
+            }
+          ]
+        },
+        {
+          "modifiers": "normal",
+          "type": "cond",
+          "if": {
+            "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
+            "action": {
+              "then": [
+                {
+                  "modifiers": "normal",
+                  "type": "script",
+                  "script": "osascript openNoteWithNotelink.scpt {query}"
+                },
+                {
+                  "modifiers": "normal",
+                  "type": "script",
+                  "script": "node writeLog.js \"noteopen {query}\""
+                }
+              ],
+              "else": [
+                {
+                  "modifiers": "normal",
+                  "type": "cond",
+                  "if": {
+                    "cond": "{query} == \"error\"",
+                    "action": {
+                      "then": [],
+                      "else": [
+                        {
+                          "modifiers": "normal",
+                          "type": "script",
+                          "script": "osascript openCollectionWindow.scpt {query}"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "scriptfilter",
+      "command": "encl",
+      "title": "encl",
+      "subtitle": "Create a note with the contents of the clipboard.",
+      "script_filter": "node clipCheck.js {\"clip\"}",
+      "running_subtext": "",
+      "withspace": false,
+      "arg_type": "no",
+      "action": [
+        {
+          "modifiers": "normal",
+          "type": "script",
+          "script": "node clip.js",
+          "action": [
+            {
+              "modifiers": "normal",
+              "type": "notification",
+              "title": "Clip complete",
+              "text": "The text on the clipboard is made into a note."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "scriptfilter",
+      "command": "enclo",
+      "title": "enclo",
+      "subtitle": "Create a note with the contents of the clipboard and open",
+      "script_filter": "node clipCheck.js {\"oclip\"}",
+      "running_subtext": "",
+      "withspace": false,
+      "arg_type": "no",
+      "action": [
+        {
+          "modifiers": "normal",
+          "type": "script",
+          "script": "node clipAndOpen.js"
+        }
+      ]
+    },
+    {
+      "type": "scriptfilter",
+      "command": "enclf",
+      "title": "enclf",
+      "subtitle": "Create a note with copied files",
+      "script_filter": "node clipCheck.js {\"fclip\"}",
+      "running_subtext": "",
+      "withspace": false,
+      "arg_type": "no",
+      "action": [
+        {
+          "modifiers": "normal",
+          "type": "script",
+          "script": "osascript clipNoteWithFiles.scpt"
+        }
+      ]
+    },
+    {
+      "type": "scriptfilter",
+      "command": "ens",
+      "title": "ens",
+      "subtitle": "Search for notes.",
+      "script_filter": "node searchNote.js '{query}'",
+      "running_subtext": "Searching...",
+      "withspace": true,
+      "arg_type": "optional",
+      "action": [
+        {
+          "modifiers": "fn",
+          "type": "script",
+          "script": "osascript openWebBrowser.scpt $1",
+          "action": [
+            {
+              "modifiers": "normal",
+              "type": "notification",
+              "title": "Note not contained url!",
+              "text": "Source URL Error"
+            }
+          ]
+        },
+        {
+          "modifiers": "normal",
+          "type": "cond",
+          "if": {
+            "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
+            "action": {
+              "then": [
+                {
+                  "modifiers": "normal",
+                  "type": "args",
+                  "arg": "{var:notelink}",
+                  "action": [
+                    {
+                      "modifiers": "normal",
+                      "type": "script",
+                      "script": "osascript openNoteWithNotelink.scpt {query}"
+                    }
+                  ]
+                },
+                {
+                  "modifiers": "normal",
+                  "type": "args",
+                  "arg": "{var:notelink} {var:noteTitle}",
+                  "action": [
+                    {
+                      "modifiers": "normal",
+                      "type": "script",
+                      "script": "node writeLog.js \"noteopen {query}\""
+                    }
+                  ]
+                }
+              ],
+              "else": [
+                {
+                  "modifiers": "normal",
+                  "type": "cond",
+                  "if": {
+                    "cond": "{query} == \"error\"",
+                    "action": {
+                      "then": [
+                        {
+                          "modifiers": "normal",
+                          "type": "notification",
+                          "title": "Error occured",
+                          "text": ""
+                        }
+                      ],
+                      "else": [
+                        {
+                          "modifiers": "normal",
+                          "type": "script",
+                          "script": "osascript openCollectionWindow.scpt {query}"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "scriptfilter",
+      "command": "enn",
+      "title": "enn",
+      "subtitle": "Search Note in Trash bin",
+      "script_filter": "node searchNote.js '{query}' --trash",
+      "running_subtext": "Searching...",
+      "withspace": true,
+      "arg_type": "optional",
+      "action": [
+        {
+          "modifiers": "normal",
+          "type": "script",
+          "script": "osascript openNoteByBrowser.scpt {query}"
+        }
+      ]
+    },
+    {
+      "type": "scriptfilter",
+      "command": "enu",
+      "title": "enu",
+      "subtitle": "Search Note by URL",
+      "script_filter": "node searchNote.js '{query}' --sourceurl",
+      "running_subtext": "Searching notes by URL",
+      "withspace": true,
+      "arg_type": "optional",
+      "action": [
+        {
+          "modifiers": "fn",
+          "type": "script",
+          "script": "osascript openWebBrowser.scpt '{query}'",
+          "action": [
+            {
+              "modifiers": "normal",
+              "type": "notification",
+              "title": "Note not contained url",
+              "text": "Source URL Error"
+            }
+          ]
+        },
+        {
+          "modifiers": "normal",
+          "type": "cond",
+          "if": {
+            "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
+            "action": {
+              "then": [
+                {
+                  "modifiers": "normal",
+                  "type": "args",
+                  "arg": "{var:notelink}",
+                  "action": [
+                    {
+                      "modifiers": "normal",
+                      "type": "script",
+                      "script": "osascript openNoteWithNotelink.scpt $1"
+                    }
+                  ]
+                },
+                {
+                  "modifiers": "normal",
+                  "type": "args",
+                  "arg": "{var:notelink} {var:noteTitle}",
+                  "action": [
+                    {
+                      "modifiers": "normal",
+                      "type": "script",
+                      "script": "node writeLog.js \"noteopen {query}\""
+                    }
+                  ]
+                }
+              ],
+              "else": [
+                {
+                  "modifiers": "normal",
+                  "type": "cond",
+                  "if": {
+                    "cond": "{query} == \"error\"",
+                    "action": {
+                      "then": [
+                        {
+                          "modifiers": "normal",
+                          "type": "notification",
+                          "title": "Error occured",
+                          "text": ""
+                        }
+                      ],
+                      "else": [
+                        {
+                          "modifiers": "normal",
+                          "type": "script",
+                          "script": "osascript openCollectionWindow.scpt {query}"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "scriptfilter",
+      "command": "enr",
+      "title": "enr",
+      "subtitle": "Search Note with Reminder",
+      "script_filter": "node searchNote.js '{query}' --reminder",
+      "running_subtext": "Searching notes with reminder",
+      "withspace": true,
+      "arg_type": "optional",
+      "action": [
+        {
+          "modifiers": "fn",
+          "type": "script",
+          "script": "osascript openWebBrowser.scpt $1",
+          "action": [
+            {
+              "modifiers": "normal",
+              "type": "notification",
+              "title": "Note not contained url",
+              "text": "Source URL Error"
+            }
+          ]
+        },
+        {
+          "modifiers": "normal",
+          "type": "cond",
+          "if": {
+            "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
+            "action": {
+              "then": [
+                {
+                  "modifiers": "normal",
+                  "type": "args",
+                  "arg": "{var:notelink} {var:noteTitle}",
+                  "action": [
+                    {
+                      "modifiers": "normal",
+                      "type": "script",
+                      "script": "node writeLog.js \"noteopen {query}\""
+                    }
+                  ]
+                },
+                {
+                  "modifiers": "normal",
+                  "type": "args",
+                  "arg": "{var:notelink}",
+                  "action": [
+                    {
+                      "modifiers": "normal",
+                      "type": "script",
+                      "script": "osascript openNoteWithNotelink.scpt $1"
+                    }
+                  ]
+                }
+              ],
+              "else": [
+                {
+                  "modifiers": "normal",
+                  "type": "cond",
+                  "if": {
+                    "cond": "{query} == \"error\"",
+                    "action": {
+                      "then": [
+                        {
+                          "modifiers": "normal",
+                          "type": "notification",
+                          "title": "Error occured",
+                          "text": ""
+                        }
+                      ],
+                      "else": [
+                        {
+                          "modifiers": "normal",
+                          "type": "script",
+                          "script": "osascript openCollectionWindow.scpt {query}"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "scriptfilter",
+      "command": "eni",
+      "title": "eni",
+      "subtitle": "Search Note by Intitle",
+      "script_filter": "node searchNote.js '{query}' --intitle",
+      "running_subtext": "Searching...",
+      "withspace": true,
+      "arg_type": "optional",
+      "action": [
+        {
+          "modifiers": "fn",
+          "type": "script",
+          "script": "osascript openWebBrowser.scpt $1",
+          "action": [
+            {
+              "modifiers": "normal",
+              "type": "notification",
+              "title": "Note not contained url",
+              "text": "Source URL Error"
+            }
+          ]
+        },
+        {
+          "modifiers": "normal",
+          "type": "cond",
+          "if": {
+            "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
+            "action": {
+              "then": [
+                {
+                  "modifiers": "normal",
+                  "type": "args",
+                  "arg": "{var:notelink} {var:noteTitle}",
+                  "action": [
+                    {
+                      "modifiers": "normal",
+                      "type": "script",
+                      "script": "node writeLog.js \"noteopen {query}\""
+                    }
+                  ]
+                },
+                {
+                  "modifiers": "normal",
+                  "type": "args",
+                  "arg": "{var:notelink}",
+                  "action": [
+                    {
+                      "modifiers": "normal",
+                      "type": "script",
+                      "script": "osascript openNoteWithNotelink.scpt $1"
+                    }
+                  ]
+                }
+              ],
+              "else": [
+                {
+                  "modifiers": "normal",
+                  "type": "cond",
+                  "if": {
+                    "cond": "{query} == \"error\"",
+                    "action": {
+                      "then": [
+                        {
+                          "modifiers": "normal",
+                          "type": "notification",
+                          "title": "Error occured",
+                          "text": ""
+                        }
+                      ],
+                      "else": [
+                        {
+                          "modifiers": "normal",
+                          "type": "script",
+                          "script": "osascript openCollectionWindow.scpt {query}"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "scriptfilter",
+      "command": "enf",
+      "title": "enf",
+      "subtitle": "Search Note by file extension",
+      "script_filter": "node searchNote.js '{query}' --fileExtension",
+      "running_subtext": "Searching note with file extension...",
+      "withspace": true,
+      "arg_type": "optional",
+      "action": [
+        {
+          "modifiers": "fn",
+          "type": "script",
+          "script": "osascript openWebBrowser.scpt $1",
+          "action": [
+            {
+              "modifiers": "normal",
+              "type": "notification",
+              "title": "Note not contained url",
+              "text": "Source URL Error"
+            }
+          ]
+        },
+        {
+          "modifiers": "normal",
+          "type": "cond",
+          "if": {
+            "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
+            "action": {
+              "then": [
+                {
+                  "modifiers": "normal",
+                  "type": "args",
+                  "arg": "{var:notelink} {var:noteTitle}",
+                  "action": [
+                    {
+                      "modifiers": "normal",
+                      "type": "script",
+                      "script": "node writeLog.js \"noteopen {query}\""
+                    }
+                  ]
+                },
+                {
+                  "modifiers": "normal",
+                  "type": "args",
+                  "arg": "{var:notelink}",
+                  "action": [
+                    {
+                      "modifiers": "normal",
+                      "type": "script",
+                      "script": "osascript openNoteWithNotelink.scpt $1"
+                    }
+                  ]
+                }
+              ],
+              "else": [
+                {
+                  "modifiers": "normal",
+                  "type": "cond",
+                  "if": {
+                    "cond": "{query} == \"error\"",
+                    "action": {
+                      "then": [
+                        {
+                          "modifiers": "normal",
+                          "type": "notification",
+                          "title": "Error occured",
+                          "text": ""
+                        }
+                      ],
+                      "else": [
+                        {
+                          "modifiers": "normal",
+                          "type": "script",
+                          "script": "osascript openCollectionWindow.scpt {query}"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "scriptfilter",
+      "command": "ent",
+      "title": "ent",
+      "subtitle": "Search Tag..",
+      "script_filter": "node searchTag.js \"$1\"",
+      "running_subtext": "Tag searching...",
+      "withspace": true,
+      "arg_type": "optional",
+      "action": [
+        {
+          "modifiers": "cmd",
+          "type": "script",
+          "script": "var evernote = Application('Evernote');\nevernote.activate();\nevernote.openCollectionWindow({withQueryString: '{query}'});"
+        },
+        {
+          "modifiers": "cmd",
+          "type": "script",
+          "script": "node writeLog.js \"ent {query}\""
+        },
+        {
+          "modifiers": "normal",
+          "type": "script",
+          "script": "node writeLog.js \"ent {query}\""
+        }
+      ]
+    },
+    {
+      "type": "scriptfilter",
+      "command": "enb",
+      "title": "enb",
+      "subtitle": "Search Note..",
+      "script_filter": "node searchNotebook.js '{query}' --notebook",
+      "running_subtext": "Searching notebook..",
+      "withspace": true,
+      "arg_type": "optional",
+      "action": [
+        {
+          "modifiers": "cmd",
+          "type": "script",
+          "script": "node writeLog.js \"enb {query}\""
+        },
+        {
+          "modifiers": "cmd",
+          "type": "script",
+          "script": "var evernote = Application('Evernote');\nevernote.activate();\nevernote.openCollectionWindow({withQueryString: 'notebook:' + '\"{query}\"'});"
+        },
+        {
+          "modifiers": "normal",
+          "type": "script",
+          "script": "node writeLog.js \"enb {query}\""
+        }
+      ]
+    },
+    {
+      "type": "scriptfilter",
+      "command": "enx",
+      "title": "enx",
+      "subtitle": "Select Note to export",
+      "script_filter": "node searchNote.js '{query}'",
+      "running_subtext": "Export selected note...",
+      "withspace": true,
+      "arg_type": "optional",
+      "action": [
+        {
+          "modifiers": "normal",
+          "type": "script",
+          "script": "osascript noteExport.scpt $1"
+        }
+      ]
+    },
+    {
+      "type": "scriptfilter",
+      "command": "enap",
+      "title": "enap",
+      "subtitle": "Append data to selected note.",
+      "script_filter": "node searchNote.js '{query}' --append",
+      "running_subtext": "Searching...",
+      "withspace": true,
+      "arg_type": "optional",
+      "action": [
+        {
+          "modifiers": "normal",
+          "type": "args",
+          "arg": "",
+          "action": [
+            {
+              "modifiers": "normal",
+              "type": "keyword",
+              "subtitle": "",
+              "action": [
+                {
+                  "modifiers": "normal",
+                  "type": "args",
+                  "arg": "{var:notelink} {query}",
+                  "action": [
+                    {
+                      "modifiers": "normal",
+                      "type": "script",
+                      "script": "node appendNote.js '{query}'",
+                      "action": [
+                        {
+                          "modifiers": "normal",
+                          "type": "notification",
+                          "title": "Content appended.",
+                          "text": ""
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
