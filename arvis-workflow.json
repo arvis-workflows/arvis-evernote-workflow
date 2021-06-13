@@ -1,13 +1,13 @@
 {
   "$schema": "https://github.com/jopemachine/arvis-core/blob/master/workflow-schema.json",
   "category": "Productivity",
-  "createdby": "jopemachine",
+  "creator": "jopemachine",
   "description": "Arvis evernote workflow",
   "defaultIcon": "icon.png",
-  "name": "alfred-evernote-workflow",
-  "readme": "Evernote workflow for Arvis \n\nhttps://github.com/jopemachine/alfred-evernote-workflow",
+  "name": "arvis-evernote-workflow",
+  "readme": "Evernote workflow for Arvis \n\nhttps://github.com/jopemachine/arvis-evernote-workflow",
   "version": "0.0.1",
-  "webaddress": "https://github.com/jopemachine/arvis-evernote-workflow#readme",
+  "webAddress": "https://github.com/jopemachine/arvis-evernote-workflow#readme",
   "enabled": true,
   "commands": [
     {
@@ -16,19 +16,19 @@
       "title": "en > authtoken",
       "subtitle": "Usage: en > authtoken {your api token}",
       "withspace": true,
-      "arg_type": "required",
-      "action": [
+      "argType": "required",
+      "actions": [
         {
           "modifiers": "normal",
           "type": "script",
           "script": "node auth.js '{query}'",
-          "action": [
+          "actions": [
             {
               "modifiers": "normal",
               "type": "cond",
               "if": {
                 "cond": "new RegExp(\".*error.*\").test({query})",
-                "action": {
+                "actions": {
                   "then": [
                     {
                       "modifiers": "normal",
@@ -58,8 +58,8 @@
       "title": "en > gettoken",
       "subtitle": "Get OAuth token by your evernote account",
       "withspace": false,
-      "arg_type": "no",
-      "action": [
+      "argType": "no",
+      "actions": [
         {
           "modifiers": "normal",
           "type": "open",
@@ -73,8 +73,8 @@
       "title": "en",
       "subtitle": "Open the Evernote.",
       "withspace": false,
-      "arg_type": "no",
-      "action": [
+      "argType": "no",
+      "actions": [
         {
           "modifiers": "normal",
           "type": "script",
@@ -88,13 +88,13 @@
       "title": "en > clearcache",
       "subtitle": "Clean all quicklook cache of alfred-evernote-workflow",
       "withspace": false,
-      "arg_type": "no",
-      "action": [
+      "argType": "no",
+      "actions": [
         {
           "modifiers": "normal",
           "type": "script",
           "script": "node deleteSearchContent.js",
-          "action": [
+          "actions": [
             {
               "modifiers": "normal",
               "type": "notification",
@@ -111,13 +111,13 @@
       "title": "en > clearlog",
       "subtitle": "Clean all command logs",
       "withspace": false,
-      "arg_type": "no",
-      "action": [
+      "argType": "no",
+      "actions": [
         {
           "modifiers": "normal",
           "type": "script",
           "script": "node deleteCommandLog.js",
-          "action": [
+          "actions": [
             {
               "modifiers": "normal",
               "type": "notification",
@@ -134,8 +134,8 @@
       "title": "This work could take several minutes.",
       "subtitle": "You'll get a notification when the caching is complete.",
       "withspace": false,
-      "arg_type": "no",
-      "action": []
+      "argType": "no",
+      "actions": []
     },
     {
       "type": "keyword",
@@ -143,8 +143,8 @@
       "title": "en > help",
       "subtitle": "Please Read readme.md first",
       "withspace": false,
-      "arg_type": "no",
-      "action": [
+      "argType": "no",
+      "actions": [
         {
           "modifiers": "normal",
           "type": "open",
@@ -158,13 +158,13 @@
       "title": "enc",
       "subtitle": "Enter note content to create.",
       "withspace": true,
-      "arg_type": "required",
-      "action": [
+      "argType": "required",
+      "actions": [
         {
           "modifiers": "normal",
           "type": "script",
           "script": "node createNote.js '{query}'",
-          "action": [
+          "actions": [
             {
               "modifiers": "normal",
               "type": "notification",
@@ -181,13 +181,13 @@
       "title": "en > sync",
       "subtitle": "Sync Evernote",
       "withspace": false,
-      "arg_type": "no",
-      "action": [
+      "argType": "no",
+      "actions": [
         {
           "modifiers": "normal",
           "type": "script",
           "script": "tell application \"Evernote\" to synchronize",
-          "action": [
+          "actions": [
             {
               "modifiers": "normal",
               "type": "notification",
@@ -204,33 +204,33 @@
       ]
     },
     {
-      "type": "scriptfilter",
+      "type": "scriptFilter",
       "command": "en > savecache",
       "title": "en > savecache",
       "subtitle": "",
-      "script_filter": "node checkBeforeCaching.js",
-      "running_subtext": "",
+      "scriptFilter": "node checkBeforeCaching.js",
+      "runningSubtext": "",
       "withspace": false,
-      "arg_type": "no",
-      "action": [
+      "argType": "no",
+      "actions": [
         {
           "modifiers": "normal",
           "type": "cond",
           "if": {
             "cond": "new RegExp(\"true\").test({query})",
-            "action": {
+            "actions": {
               "then": [
                 {
                   "modifiers": "normal",
                   "type": "script",
                   "script": "osascript saveCache.scpt",
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "normal",
                       "type": "cond",
                       "if": {
                         "cond": "new RegExp(\".*1763.*\").test({query})",
-                        "action": {
+                        "actions": {
                           "then": [
                             {
                               "modifiers": "normal",
@@ -272,25 +272,25 @@
       ]
     },
     {
-      "type": "scriptfilter",
+      "type": "scriptFilter",
       "command": "enct",
       "title": "enct",
       "subtitle": "Select tag and enter note content to create.",
-      "script_filter": "node searchTag.js '{query}' --create",
-      "running_subtext": "Tag searching...",
+      "scriptFilter": "node searchTag.js '{query}' --create",
+      "runningSubtext": "Tag searching...",
       "withspace": true,
-      "arg_type": "optional",
-      "action": [
+      "argType": "optional",
+      "actions": [
         {
           "modifiers": "normal",
           "type": "keyword",
           "subtitle": "Please enter note content to create.",
-          "action": [
+          "actions": [
             {
               "modifiers": "normal",
               "type": "script",
               "script": "node createNoteWithTag.js '{query}'",
-              "action": [
+              "actions": [
                 {
                   "modifiers": "normal",
                   "type": "notification",
@@ -304,28 +304,28 @@
       ]
     },
     {
-      "type": "scriptfilter",
+      "type": "scriptFilter",
       "command": "enl",
       "title": "enl",
       "subtitle": "Retrieve your command logs",
-      "script_filter": "node readLog.js {query}",
-      "running_subtext": "Fetching...",
+      "scriptFilter": "node readLog.js {query}",
+      "runningSubtext": "Fetching...",
       "withspace": true,
-      "arg_type": "optional",
-      "action": [
+      "argType": "optional",
+      "actions": [
         {
           "modifiers": "normal",
           "type": "cond",
           "if": {
             "cond": "new RegExp(\"\\$\\{en\\}\").test({query})",
-            "action": {
+            "actions": {
               "then": [
                 {
                   "modifiers": "normal",
                   "type": "keyword",
                   "keyword": "en",
                   "subtitle": "Open the Evernote.",
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "normal",
                       "type": "script",
@@ -343,19 +343,19 @@
           "type": "cond",
           "if": {
             "cond": "new RegExp(\"\\$\\{ensync\\}\").test({query})",
-            "action": {
+            "actions": {
               "then": [
                 {
                   "modifiers": "normal",
                   "type": "keyword",
                   "keyword": "en > sync",
                   "subtitle": "Sync Evernote",
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "normal",
                       "type": "script",
                       "script": "tell application \"Evernote\" to synchronize",
-                      "action": [
+                      "actions": [
                         {
                           "modifiers": "normal",
                           "type": "notification",
@@ -381,22 +381,22 @@
           "type": "cond",
           "if": {
             "cond": "new RegExp(\"\\$\\{entodo\\}\").test({query})",
-            "action": {
+            "actions": {
               "then": [
                 {
                   "modifiers": "normal",
                   "command": "entodo",
                   "title": "entodo",
-                  "type": "scriptfilter",
-                  "script_filter": "node searchNote.js '{query}' --todo",
-                  "running_subtext": "Searching...",
+                  "type": "scriptFilter",
+                  "scriptFilter": "node searchNote.js '{query}' --todo",
+                  "runningSubtext": "Searching...",
                   "withspace": true,
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "fn",
                       "type": "script",
                       "script": "osascript openWebBrowser.scpt $1",
-                      "action": [
+                      "actions": [
                         {
                           "modifiers": "normal",
                           "type": "notification",
@@ -410,7 +410,7 @@
                       "type": "cond",
                       "if": {
                         "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
-                        "action": {
+                        "actions": {
                           "then": [
                             {
                               "modifiers": "normal",
@@ -429,7 +429,7 @@
                               "type": "cond",
                               "if": {
                                 "cond": "{query} == \"error\"",
-                                "action": {
+                                "actions": {
                                   "then": [],
                                   "else": [
                                     {
@@ -457,7 +457,7 @@
           "type": "cond",
           "if": {
             "cond": "new RegExp(\"\\$\\{noteopen\\}.*\").test({query})",
-            "action": {
+            "actions": {
               "then": [
                 {
                   "modifiers": "normal",
@@ -474,22 +474,22 @@
           "type": "cond",
           "if": {
             "cond": "new RegExp(\"\\$\\{ens\\}.*\").test({query})",
-            "action": {
+            "actions": {
               "then": [
                 {
                   "modifiers": "normal",
                   "command": "ens",
                   "title": "ens",
-                  "type": "scriptfilter",
-                  "script_filter": "node searchNote.js '{query}'",
-                  "running_subtext": "Searching...",
+                  "type": "scriptFilter",
+                  "scriptFilter": "node searchNote.js '{query}'",
+                  "runningSubtext": "Searching...",
                   "withspace": true,
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "fn",
                       "type": "script",
                       "script": "osascript openWebBrowser.scpt $1",
-                      "action": [
+                      "actions": [
                         {
                           "modifiers": "normal",
                           "type": "notification",
@@ -503,13 +503,13 @@
                       "type": "cond",
                       "if": {
                         "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
-                        "action": {
+                        "actions": {
                           "then": [
                             {
                               "modifiers": "normal",
                               "type": "args",
                               "arg": "{var:notelink}",
-                              "action": [
+                              "actions": [
                                 {
                                   "modifiers": "normal",
                                   "type": "script",
@@ -521,7 +521,7 @@
                               "modifiers": "normal",
                               "type": "args",
                               "arg": "{var:notelink} {var:noteTitle}",
-                              "action": [
+                              "actions": [
                                 {
                                   "modifiers": "normal",
                                   "type": "script",
@@ -536,7 +536,7 @@
                               "type": "cond",
                               "if": {
                                 "cond": "{query} == \"error\"",
-                                "action": {
+                                "actions": {
                                   "then": [
                                     {
                                       "modifiers": "normal",
@@ -571,17 +571,17 @@
           "type": "cond",
           "if": {
             "cond": "new RegExp(\"\\$\\{enn\\}.*\").test({query})",
-            "action": {
+            "actions": {
               "then": [
                 {
                   "modifiers": "normal",
                   "command": "enn",
                   "title": "enn",
-                  "type": "scriptfilter",
-                  "script_filter": "node searchNote.js '{query}' --trash",
-                  "running_subtext": "Searching...",
+                  "type": "scriptFilter",
+                  "scriptFilter": "node searchNote.js '{query}' --trash",
+                  "runningSubtext": "Searching...",
                   "withspace": true,
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "normal",
                       "type": "script",
@@ -599,22 +599,22 @@
           "type": "cond",
           "if": {
             "cond": "new RegExp(\"\\$\\{enu\\}.*\").test({query})",
-            "action": {
+            "actions": {
               "then": [
                 {
                   "modifiers": "normal",
                   "command": "enu",
                   "title": "enu",
-                  "type": "scriptfilter",
-                  "script_filter": "node searchNote.js '{query}' --sourceurl",
-                  "running_subtext": "Searching notes by URL",
+                  "type": "scriptFilter",
+                  "scriptFilter": "node searchNote.js '{query}' --sourceurl",
+                  "runningSubtext": "Searching notes by URL",
                   "withspace": true,
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "fn",
                       "type": "script",
                       "script": "osascript openWebBrowser.scpt '{query}'",
-                      "action": [
+                      "actions": [
                         {
                           "modifiers": "normal",
                           "type": "notification",
@@ -628,13 +628,13 @@
                       "type": "cond",
                       "if": {
                         "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
-                        "action": {
+                        "actions": {
                           "then": [
                             {
                               "modifiers": "normal",
                               "type": "args",
                               "arg": "{var:notelink}",
-                              "action": [
+                              "actions": [
                                 {
                                   "modifiers": "normal",
                                   "type": "script",
@@ -646,7 +646,7 @@
                               "modifiers": "normal",
                               "type": "args",
                               "arg": "{var:notelink} {var:noteTitle}",
-                              "action": [
+                              "actions": [
                                 {
                                   "modifiers": "normal",
                                   "type": "script",
@@ -661,7 +661,7 @@
                               "type": "cond",
                               "if": {
                                 "cond": "{query} == \"error\"",
-                                "action": {
+                                "actions": {
                                   "then": [
                                     {
                                       "modifiers": "normal",
@@ -696,22 +696,22 @@
           "type": "cond",
           "if": {
             "cond": "new RegExp(\"\\$\\{enr\\}.*\").test({query})",
-            "action": {
+            "actions": {
               "then": [
                 {
                   "modifiers": "normal",
                   "command": "enr",
                   "title": "enr",
-                  "type": "scriptfilter",
-                  "script_filter": "node searchNote.js '{query}' --reminder",
-                  "running_subtext": "Searching notes with reminder",
+                  "type": "scriptFilter",
+                  "scriptFilter": "node searchNote.js '{query}' --reminder",
+                  "runningSubtext": "Searching notes with reminder",
                   "withspace": true,
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "fn",
                       "type": "script",
                       "script": "osascript openWebBrowser.scpt $1",
-                      "action": [
+                      "actions": [
                         {
                           "modifiers": "normal",
                           "type": "notification",
@@ -725,13 +725,13 @@
                       "type": "cond",
                       "if": {
                         "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
-                        "action": {
+                        "actions": {
                           "then": [
                             {
                               "modifiers": "normal",
                               "type": "args",
                               "arg": "{var:notelink} {var:noteTitle}",
-                              "action": [
+                              "actions": [
                                 {
                                   "modifiers": "normal",
                                   "type": "script",
@@ -743,7 +743,7 @@
                               "modifiers": "normal",
                               "type": "args",
                               "arg": "{var:notelink}",
-                              "action": [
+                              "actions": [
                                 {
                                   "modifiers": "normal",
                                   "type": "script",
@@ -758,7 +758,7 @@
                               "type": "cond",
                               "if": {
                                 "cond": "{query} == \"error\"",
-                                "action": {
+                                "actions": {
                                   "then": [
                                     {
                                       "modifiers": "normal",
@@ -793,22 +793,22 @@
           "type": "cond",
           "if": {
             "cond": "new RegExp(\"\\$\\{eni\\}.*\").test({query})",
-            "action": {
+            "actions": {
               "then": [
                 {
                   "modifiers": "normal",
                   "command": "eni",
                   "title": "eni",
-                  "type": "scriptfilter",
-                  "script_filter": "node searchNote.js '{query}' --intitle",
-                  "running_subtext": "Searching...",
+                  "type": "scriptFilter",
+                  "scriptFilter": "node searchNote.js '{query}' --intitle",
+                  "runningSubtext": "Searching...",
                   "withspace": true,
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "fn",
                       "type": "script",
                       "script": "osascript openWebBrowser.scpt $1",
-                      "action": [
+                      "actions": [
                         {
                           "modifiers": "normal",
                           "type": "notification",
@@ -822,13 +822,13 @@
                       "type": "cond",
                       "if": {
                         "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
-                        "action": {
+                        "actions": {
                           "then": [
                             {
                               "modifiers": "normal",
                               "type": "args",
                               "arg": "{var:notelink} {var:noteTitle}",
-                              "action": [
+                              "actions": [
                                 {
                                   "modifiers": "normal",
                                   "type": "script",
@@ -840,7 +840,7 @@
                               "modifiers": "normal",
                               "type": "args",
                               "arg": "{var:notelink}",
-                              "action": [
+                              "actions": [
                                 {
                                   "modifiers": "normal",
                                   "type": "script",
@@ -855,7 +855,7 @@
                               "type": "cond",
                               "if": {
                                 "cond": "{query} == \"error\"",
-                                "action": {
+                                "actions": {
                                   "then": [
                                     {
                                       "modifiers": "normal",
@@ -890,22 +890,22 @@
           "type": "cond",
           "if": {
             "cond": "new RegExp(\"\\$\\{ent\\}.*\").test({query})",
-            "action": {
+            "actions": {
               "then": [
                 {
                   "modifiers": "normal",
                   "command": "ens",
                   "title": "ens",
-                  "type": "scriptfilter",
-                  "script_filter": "node searchNote.js '{query}'",
-                  "running_subtext": "Searching...",
+                  "type": "scriptFilter",
+                  "scriptFilter": "node searchNote.js '{query}'",
+                  "runningSubtext": "Searching...",
                   "withspace": true,
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "fn",
                       "type": "script",
                       "script": "osascript openWebBrowser.scpt $1",
-                      "action": [
+                      "actions": [
                         {
                           "modifiers": "normal",
                           "type": "notification",
@@ -919,13 +919,13 @@
                       "type": "cond",
                       "if": {
                         "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
-                        "action": {
+                        "actions": {
                           "then": [
                             {
                               "modifiers": "normal",
                               "type": "args",
                               "arg": "{var:notelink}",
-                              "action": [
+                              "actions": [
                                 {
                                   "modifiers": "normal",
                                   "type": "script",
@@ -937,7 +937,7 @@
                               "modifiers": "normal",
                               "type": "args",
                               "arg": "{var:notelink} {var:noteTitle}",
-                              "action": [
+                              "actions": [
                                 {
                                   "modifiers": "normal",
                                   "type": "script",
@@ -952,7 +952,7 @@
                               "type": "cond",
                               "if": {
                                 "cond": "{query} == \"error\"",
-                                "action": {
+                                "actions": {
                                   "then": [
                                     {
                                       "modifiers": "normal",
@@ -987,22 +987,22 @@
           "type": "cond",
           "if": {
             "cond": "new RegExp(\"\\$\\{enb\\}.*\").test({query})",
-            "action": {
+            "actions": {
               "then": [
                 {
                   "modifiers": "normal",
                   "command": "ens",
                   "title": "ens",
-                  "type": "scriptfilter",
-                  "script_filter": "node searchNote.js '{query}'",
-                  "running_subtext": "Searching...",
+                  "type": "scriptFilter",
+                  "scriptFilter": "node searchNote.js '{query}'",
+                  "runningSubtext": "Searching...",
                   "withspace": true,
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "fn",
                       "type": "script",
                       "script": "osascript openWebBrowser.scpt $1",
-                      "action": [
+                      "actions": [
                         {
                           "modifiers": "normal",
                           "type": "notification",
@@ -1016,13 +1016,13 @@
                       "type": "cond",
                       "if": {
                         "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
-                        "action": {
+                        "actions": {
                           "then": [
                             {
                               "modifiers": "normal",
                               "type": "args",
                               "arg": "{var:notelink}",
-                              "action": [
+                              "actions": [
                                 {
                                   "modifiers": "normal",
                                   "type": "script",
@@ -1034,7 +1034,7 @@
                               "modifiers": "normal",
                               "type": "args",
                               "arg": "{var:notelink} {var:noteTitle}",
-                              "action": [
+                              "actions": [
                                 {
                                   "modifiers": "normal",
                                   "type": "script",
@@ -1049,7 +1049,7 @@
                               "type": "cond",
                               "if": {
                                 "cond": "{query} == \"error\"",
-                                "action": {
+                                "actions": {
                                   "then": [
                                     {
                                       "modifiers": "normal",
@@ -1082,20 +1082,20 @@
       ]
     },
     {
-      "type": "scriptfilter",
+      "type": "scriptFilter",
       "command": "entodo",
       "title": "entodo",
       "subtitle": "Search for notes with check boxes.",
-      "script_filter": "node searchNote.js '{query}' --todo",
-      "running_subtext": "Searching...",
+      "scriptFilter": "node searchNote.js '{query}' --todo",
+      "runningSubtext": "Searching...",
       "withspace": true,
-      "arg_type": "optional",
-      "action": [
+      "argType": "optional",
+      "actions": [
         {
           "modifiers": "fn",
           "type": "script",
           "script": "osascript openWebBrowser.scpt $1",
-          "action": [
+          "actions": [
             {
               "modifiers": "normal",
               "type": "notification",
@@ -1109,7 +1109,7 @@
           "type": "cond",
           "if": {
             "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
-            "action": {
+            "actions": {
               "then": [
                 {
                   "modifiers": "normal",
@@ -1128,7 +1128,7 @@
                   "type": "cond",
                   "if": {
                     "cond": "{query} == \"error\"",
-                    "action": {
+                    "actions": {
                       "then": [],
                       "else": [
                         {
@@ -1147,20 +1147,20 @@
       ]
     },
     {
-      "type": "scriptfilter",
+      "type": "scriptFilter",
       "command": "encl",
       "title": "encl",
       "subtitle": "Create a note with the contents of the clipboard.",
-      "script_filter": "node clipCheck.js {\"clip\"}",
-      "running_subtext": "",
+      "scriptFilter": "node clipCheck.js {\"clip\"}",
+      "runningSubtext": "",
       "withspace": false,
-      "arg_type": "no",
-      "action": [
+      "argType": "no",
+      "actions": [
         {
           "modifiers": "normal",
           "type": "script",
           "script": "node clip.js",
-          "action": [
+          "actions": [
             {
               "modifiers": "normal",
               "type": "notification",
@@ -1172,15 +1172,15 @@
       ]
     },
     {
-      "type": "scriptfilter",
+      "type": "scriptFilter",
       "command": "enclo",
       "title": "enclo",
       "subtitle": "Create a note with the contents of the clipboard and open",
-      "script_filter": "node clipCheck.js {\"oclip\"}",
-      "running_subtext": "",
+      "scriptFilter": "node clipCheck.js {\"oclip\"}",
+      "runningSubtext": "",
       "withspace": false,
-      "arg_type": "no",
-      "action": [
+      "argType": "no",
+      "actions": [
         {
           "modifiers": "normal",
           "type": "script",
@@ -1189,15 +1189,15 @@
       ]
     },
     {
-      "type": "scriptfilter",
+      "type": "scriptFilter",
       "command": "enclf",
       "title": "enclf",
       "subtitle": "Create a note with copied files",
-      "script_filter": "node clipCheck.js {\"fclip\"}",
-      "running_subtext": "",
+      "scriptFilter": "node clipCheck.js {\"fclip\"}",
+      "runningSubtext": "",
       "withspace": false,
-      "arg_type": "no",
-      "action": [
+      "argType": "no",
+      "actions": [
         {
           "modifiers": "normal",
           "type": "script",
@@ -1206,20 +1206,20 @@
       ]
     },
     {
-      "type": "scriptfilter",
+      "type": "scriptFilter",
       "command": "ens",
       "title": "ens",
       "subtitle": "Search for notes.",
-      "script_filter": "node searchNote.js '{query}'",
-      "running_subtext": "Searching...",
+      "scriptFilter": "node searchNote.js '{query}'",
+      "runningSubtext": "Searching...",
       "withspace": true,
-      "arg_type": "optional",
-      "action": [
+      "argType": "optional",
+      "actions": [
         {
           "modifiers": "fn",
           "type": "script",
           "script": "osascript openWebBrowser.scpt $1",
-          "action": [
+          "actions": [
             {
               "modifiers": "normal",
               "type": "notification",
@@ -1233,13 +1233,13 @@
           "type": "cond",
           "if": {
             "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
-            "action": {
+            "actions": {
               "then": [
                 {
                   "modifiers": "normal",
                   "type": "args",
                   "arg": "{var:notelink}",
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "normal",
                       "type": "script",
@@ -1251,7 +1251,7 @@
                   "modifiers": "normal",
                   "type": "args",
                   "arg": "{var:notelink} {var:noteTitle}",
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "normal",
                       "type": "script",
@@ -1266,7 +1266,7 @@
                   "type": "cond",
                   "if": {
                     "cond": "{query} == \"error\"",
-                    "action": {
+                    "actions": {
                       "then": [
                         {
                           "modifiers": "normal",
@@ -1292,15 +1292,15 @@
       ]
     },
     {
-      "type": "scriptfilter",
+      "type": "scriptFilter",
       "command": "enn",
       "title": "enn",
       "subtitle": "Search Note in Trash bin",
-      "script_filter": "node searchNote.js '{query}' --trash",
-      "running_subtext": "Searching...",
+      "scriptFilter": "node searchNote.js '{query}' --trash",
+      "runningSubtext": "Searching...",
       "withspace": true,
-      "arg_type": "optional",
-      "action": [
+      "argType": "optional",
+      "actions": [
         {
           "modifiers": "normal",
           "type": "script",
@@ -1309,20 +1309,20 @@
       ]
     },
     {
-      "type": "scriptfilter",
+      "type": "scriptFilter",
       "command": "enu",
       "title": "enu",
       "subtitle": "Search Note by URL",
-      "script_filter": "node searchNote.js '{query}' --sourceurl",
-      "running_subtext": "Searching notes by URL",
+      "scriptFilter": "node searchNote.js '{query}' --sourceurl",
+      "runningSubtext": "Searching notes by URL",
       "withspace": true,
-      "arg_type": "optional",
-      "action": [
+      "argType": "optional",
+      "actions": [
         {
           "modifiers": "fn",
           "type": "script",
           "script": "osascript openWebBrowser.scpt '{query}'",
-          "action": [
+          "actions": [
             {
               "modifiers": "normal",
               "type": "notification",
@@ -1336,13 +1336,13 @@
           "type": "cond",
           "if": {
             "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
-            "action": {
+            "actions": {
               "then": [
                 {
                   "modifiers": "normal",
                   "type": "args",
                   "arg": "{var:notelink}",
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "normal",
                       "type": "script",
@@ -1354,7 +1354,7 @@
                   "modifiers": "normal",
                   "type": "args",
                   "arg": "{var:notelink} {var:noteTitle}",
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "normal",
                       "type": "script",
@@ -1369,7 +1369,7 @@
                   "type": "cond",
                   "if": {
                     "cond": "{query} == \"error\"",
-                    "action": {
+                    "actions": {
                       "then": [
                         {
                           "modifiers": "normal",
@@ -1395,20 +1395,20 @@
       ]
     },
     {
-      "type": "scriptfilter",
+      "type": "scriptFilter",
       "command": "enr",
       "title": "enr",
       "subtitle": "Search Note with Reminder",
-      "script_filter": "node searchNote.js '{query}' --reminder",
-      "running_subtext": "Searching notes with reminder",
+      "scriptFilter": "node searchNote.js '{query}' --reminder",
+      "runningSubtext": "Searching notes with reminder",
       "withspace": true,
-      "arg_type": "optional",
-      "action": [
+      "argType": "optional",
+      "actions": [
         {
           "modifiers": "fn",
           "type": "script",
           "script": "osascript openWebBrowser.scpt $1",
-          "action": [
+          "actions": [
             {
               "modifiers": "normal",
               "type": "notification",
@@ -1422,13 +1422,13 @@
           "type": "cond",
           "if": {
             "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
-            "action": {
+            "actions": {
               "then": [
                 {
                   "modifiers": "normal",
                   "type": "args",
                   "arg": "{var:notelink} {var:noteTitle}",
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "normal",
                       "type": "script",
@@ -1440,7 +1440,7 @@
                   "modifiers": "normal",
                   "type": "args",
                   "arg": "{var:notelink}",
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "normal",
                       "type": "script",
@@ -1455,7 +1455,7 @@
                   "type": "cond",
                   "if": {
                     "cond": "{query} == \"error\"",
-                    "action": {
+                    "actions": {
                       "then": [
                         {
                           "modifiers": "normal",
@@ -1481,20 +1481,20 @@
       ]
     },
     {
-      "type": "scriptfilter",
+      "type": "scriptFilter",
       "command": "eni",
       "title": "eni",
       "subtitle": "Search Note by Intitle",
-      "script_filter": "node searchNote.js '{query}' --intitle",
-      "running_subtext": "Searching...",
+      "scriptFilter": "node searchNote.js '{query}' --intitle",
+      "runningSubtext": "Searching...",
       "withspace": true,
-      "arg_type": "optional",
-      "action": [
+      "argType": "optional",
+      "actions": [
         {
           "modifiers": "fn",
           "type": "script",
           "script": "osascript openWebBrowser.scpt $1",
-          "action": [
+          "actions": [
             {
               "modifiers": "normal",
               "type": "notification",
@@ -1508,13 +1508,13 @@
           "type": "cond",
           "if": {
             "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
-            "action": {
+            "actions": {
               "then": [
                 {
                   "modifiers": "normal",
                   "type": "args",
                   "arg": "{var:notelink} {var:noteTitle}",
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "normal",
                       "type": "script",
@@ -1526,7 +1526,7 @@
                   "modifiers": "normal",
                   "type": "args",
                   "arg": "{var:notelink}",
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "normal",
                       "type": "script",
@@ -1541,7 +1541,7 @@
                   "type": "cond",
                   "if": {
                     "cond": "{query} == \"error\"",
-                    "action": {
+                    "actions": {
                       "then": [
                         {
                           "modifiers": "normal",
@@ -1567,20 +1567,20 @@
       ]
     },
     {
-      "type": "scriptfilter",
+      "type": "scriptFilter",
       "command": "enf",
       "title": "enf",
       "subtitle": "Search Note by file extension",
-      "script_filter": "node searchNote.js '{query}' --fileExtension",
-      "running_subtext": "Searching note with file extension...",
+      "scriptFilter": "node searchNote.js '{query}' --fileExtension",
+      "runningSubtext": "Searching note with file extension...",
       "withspace": true,
-      "arg_type": "optional",
-      "action": [
+      "argType": "optional",
+      "actions": [
         {
           "modifiers": "fn",
           "type": "script",
           "script": "osascript openWebBrowser.scpt $1",
-          "action": [
+          "actions": [
             {
               "modifiers": "normal",
               "type": "notification",
@@ -1594,13 +1594,13 @@
           "type": "cond",
           "if": {
             "cond": "new RegExp(\"evernote:///view/.*\").test({query})",
-            "action": {
+            "actions": {
               "then": [
                 {
                   "modifiers": "normal",
                   "type": "args",
                   "arg": "{var:notelink} {var:noteTitle}",
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "normal",
                       "type": "script",
@@ -1612,7 +1612,7 @@
                   "modifiers": "normal",
                   "type": "args",
                   "arg": "{var:notelink}",
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "normal",
                       "type": "script",
@@ -1627,7 +1627,7 @@
                   "type": "cond",
                   "if": {
                     "cond": "{query} == \"error\"",
-                    "action": {
+                    "actions": {
                       "then": [
                         {
                           "modifiers": "normal",
@@ -1653,15 +1653,15 @@
       ]
     },
     {
-      "type": "scriptfilter",
+      "type": "scriptFilter",
       "command": "ent",
       "title": "ent",
       "subtitle": "Search Tag..",
-      "script_filter": "node searchTag.js \"$1\"",
-      "running_subtext": "Tag searching...",
+      "scriptFilter": "node searchTag.js \"$1\"",
+      "runningSubtext": "Tag searching...",
       "withspace": true,
-      "arg_type": "optional",
-      "action": [
+      "argType": "optional",
+      "actions": [
         {
           "modifiers": "cmd",
           "type": "script",
@@ -1680,15 +1680,15 @@
       ]
     },
     {
-      "type": "scriptfilter",
+      "type": "scriptFilter",
       "command": "enb",
       "title": "enb",
       "subtitle": "Search Note..",
-      "script_filter": "node searchNotebook.js '{query}' --notebook",
-      "running_subtext": "Searching notebook..",
+      "scriptFilter": "node searchNotebook.js '{query}' --notebook",
+      "runningSubtext": "Searching notebook..",
       "withspace": true,
-      "arg_type": "optional",
-      "action": [
+      "argType": "optional",
+      "actions": [
         {
           "modifiers": "cmd",
           "type": "script",
@@ -1707,15 +1707,15 @@
       ]
     },
     {
-      "type": "scriptfilter",
+      "type": "scriptFilter",
       "command": "enx",
       "title": "enx",
       "subtitle": "Select Note to export",
-      "script_filter": "node searchNote.js '{query}'",
-      "running_subtext": "Export selected note...",
+      "scriptFilter": "node searchNote.js '{query}'",
+      "runningSubtext": "Export selected note...",
       "withspace": true,
-      "arg_type": "optional",
-      "action": [
+      "argType": "optional",
+      "actions": [
         {
           "modifiers": "normal",
           "type": "script",
@@ -1724,35 +1724,35 @@
       ]
     },
     {
-      "type": "scriptfilter",
+      "type": "scriptFilter",
       "command": "enap",
       "title": "enap",
       "subtitle": "Append data to selected note.",
-      "script_filter": "node searchNote.js '{query}' --append",
-      "running_subtext": "Searching...",
+      "scriptFilter": "node searchNote.js '{query}' --append",
+      "runningSubtext": "Searching...",
       "withspace": true,
-      "arg_type": "optional",
-      "action": [
+      "argType": "optional",
+      "actions": [
         {
           "modifiers": "normal",
           "type": "args",
           "arg": "",
-          "action": [
+          "actions": [
             {
               "modifiers": "normal",
               "type": "keyword",
               "subtitle": "",
-              "action": [
+              "actions": [
                 {
                   "modifiers": "normal",
                   "type": "args",
                   "arg": "{var:notelink} {query}",
-                  "action": [
+                  "actions": [
                     {
                       "modifiers": "normal",
                       "type": "script",
                       "script": "node appendNote.js '{query}'",
-                      "action": [
+                      "actions": [
                         {
                           "modifiers": "normal",
                           "type": "notification",
