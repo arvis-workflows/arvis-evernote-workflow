@@ -1,4 +1,4 @@
-const arvish = require('@jopemachine/arvish')
+const arvish = require('arvish')
 const config = require('./searchConfig.json')
 const _ = require('lodash')
 const LogManager = require('./logManager')

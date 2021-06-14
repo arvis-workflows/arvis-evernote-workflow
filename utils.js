@@ -3,7 +3,7 @@ const _ = require('lodash')
 const createHtmlElement = require('create-html-element')
 const isTravis = require('is-travis')
 const fs = require('fs')
-const arvish = require('@jopemachine/arvish')
+const arvish = require('arvish')
 !isTravis && require('dotenv').config()
 
 function authenticationNotProgressed () {

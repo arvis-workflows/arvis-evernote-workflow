@@ -1,4 +1,4 @@
-const arvish = require('@jopemachine/arvish')
+const arvish = require('arvish')
 const fs = require('fs')
 const osLocale = require('os-locale')
 const { getEnv } = require('./utils')

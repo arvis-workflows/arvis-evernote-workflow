@@ -1,5 +1,5 @@
 const fs = require('fs')
-const arvish = require('@jopemachine/arvish')
+const arvish = require('arvish')
 
 if (fs.existsSync('./Caching')) {
   arvish.output([

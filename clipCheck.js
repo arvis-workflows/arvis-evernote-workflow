@@ -1,4 +1,4 @@
-const arvish = require('@jopemachine/arvish')
+const arvish = require('arvish')
 const clipboardy = require('clipboardy')
 
 clipboardy.read().then((data) => {

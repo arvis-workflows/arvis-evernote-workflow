@@ -1,5 +1,5 @@
 const LogManager = require('./logManager')
-const arvish = require('@jopemachine/arvish')
+const arvish = require('arvish')
 
 if (arvish.input.startsWith('noteopen')) {
   const [command, noteguid, ...noteTitle] = arvish.input.split(' ')
