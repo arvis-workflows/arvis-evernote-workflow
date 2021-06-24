@@ -6,7 +6,7 @@
   "defaultIcon": "icon.png",
   "name": "arvis-evernote-workflow",
   "readme": "Evernote workflow for Arvis \n\nhttps://github.com/jopemachine/arvis-evernote-workflow",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "webAddress": "https://github.com/jopemachine/arvis-evernote-workflow#readme",
   "enabled": true,
   "commands": [
@@ -15,7 +15,6 @@
       "command": "en > authtoken",
       "title": "en > authtoken",
       "subtitle": "Usage: en > authtoken {your api token}",
-      "withspace": true,
       "argType": "required",
       "actions": [
         {
@@ -57,7 +56,6 @@
       "command": "en > gettoken",
       "title": "en > gettoken",
       "subtitle": "Get OAuth token by your evernote account",
-      "withspace": false,
       "argType": "no",
       "actions": [
         {
@@ -72,7 +70,6 @@
       "command": "en",
       "title": "en",
       "subtitle": "Open the Evernote.",
-      "withspace": false,
       "argType": "no",
       "actions": [
         {
@@ -87,7 +84,6 @@
       "command": "en > clearcache",
       "title": "en > clearcache",
       "subtitle": "Clean all quicklook cache of alfred-evernote-workflow",
-      "withspace": false,
       "argType": "no",
       "actions": [
         {
@@ -110,7 +106,6 @@
       "command": "en > clearlog",
       "title": "en > clearlog",
       "subtitle": "Clean all command logs",
-      "withspace": false,
       "argType": "no",
       "actions": [
         {
@@ -133,7 +128,6 @@
       "command": "__en > savecache",
       "title": "This work could take several minutes.",
       "subtitle": "You'll get a notification when the caching is complete.",
-      "withspace": false,
       "argType": "no",
       "actions": []
     },
@@ -142,7 +136,6 @@
       "command": "en > help",
       "title": "en > help",
       "subtitle": "Please Read readme.md first",
-      "withspace": false,
       "argType": "no",
       "actions": [
         {
@@ -157,7 +150,6 @@
       "command": "enc",
       "title": "enc",
       "subtitle": "Enter note content to create.",
-      "withspace": true,
       "argType": "required",
       "actions": [
         {
@@ -180,7 +172,6 @@
       "command": "en > sync",
       "title": "en > sync",
       "subtitle": "Sync Evernote",
-      "withspace": false,
       "argType": "no",
       "actions": [
         {
