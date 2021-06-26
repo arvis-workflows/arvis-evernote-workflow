@@ -9,7 +9,7 @@
   },
   "bundleDependencies": false,
   "dependencies": {
-    "arvish": "^0.2.1",
+    "arvish": ">=0.3.1",
     "@jxa/global-type": "^1.3.1",
     "@jxa/run": "^1.3.2",
     "boxen": "^4.2.0",
@@ -23,7 +23,7 @@
     "plist": "^3.0.1"
   },
   "deprecated": false,
-  "description": "Evernote workflow for Alfred 4",
+  "description": "Evernote workflow for Arvis",
   "devDependencies": {
     "ava": "^3.12.1",
     "eslint": "^7.10.0",

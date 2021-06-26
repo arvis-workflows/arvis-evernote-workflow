@@ -6,7 +6,7 @@
   "defaultIcon": "icon.png",
   "name": "arvis-evernote-workflow",
   "readme": "Evernote workflow for Arvis \n\nhttps://github.com/jopemachine/arvis-evernote-workflow",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "webAddress": "https://github.com/jopemachine/arvis-evernote-workflow#readme",
   "enabled": true,
   "commands": [
